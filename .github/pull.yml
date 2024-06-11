@@ -1,0 +1,4 @@
+version: "1"
+rules:
+  - base: main
+    upstream: VaquitApp:main    # change `wei` to the owner of upstream repo
