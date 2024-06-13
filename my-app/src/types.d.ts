@@ -36,6 +36,42 @@ declare global {
 		amount: number;
 		date: string;
 	};
+	type UniqueSpending = {
+		id: Id;
+		group_id: Id;
+		owner_id: Id;
+		category_id: Id;
+		description: string;
+		amount: number;
+		date: string;
+	};
+	type InstallmentSpending = {
+		id: Id;
+		group_id: Id;
+		owner_id: Id;
+		category_id: Id;
+		description: string;
+		amount: number;
+		amount_of_installments: number;
+		date: string;
+	};
+	type RecurringSpending = {
+		id: Id;
+		group_id: Id;
+		owner_id: Id;
+		category_id: Id;
+		description: string;
+		amount: number;
+		date: string;
+	};
+	type Payment = {
+		id: Id;
+		group_id: Id;
+		from_id: Id;
+		to_id: Id;
+		amount: number;
+		date: string;
+	};
 	type Invite = {
 		id: Id;
 		sender_id: Id;
@@ -66,6 +102,10 @@ declare global {
 		budgets: number;
 		spendings: number;
 	};
+	type PaymentReminder = {
+		receiver_email: string;
+		message: string;
+	}
 }
 
-export {};
+export { };
