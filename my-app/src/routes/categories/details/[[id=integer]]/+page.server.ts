@@ -2,6 +2,7 @@ import { error, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { categoryService, groupService } from '$lib/server/api';
 import type { PageServerLoad } from './$types';
+import { routes } from '$lib';
 
 export const load: PageServerLoad = async ({ params, url, cookies }) => {
 	const group_id = Number(url.searchParams.get('groupId')) || 0;
@@ -14,7 +15,7 @@ export const load: PageServerLoad = async ({ params, url, cookies }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ cookies, request, params }) => {
+	update: async ({ cookies, request, params }) => {
 		const id = Number(params.id) || 0;
 		const data = await request.formData();
 		const name = data.get('name')?.toString();
@@ -35,6 +36,14 @@ export const actions: Actions = {
 		const category: Category = { id, group_id, name, description, strategy };
 		await categoryService.save(category, cookies);
 
-		redirect(302, `/groups/movements/${group_id}`);
+		redirect(302, routes.groupMovements(group_id));
+	},
+	archive: async ({ cookies, params }) => {
+		const id = Number(params.id) || 0;
+		await categoryService.archive(id, cookies);
+	},
+	unarchive: async ({ cookies, params }) => {
+		const id = Number(params.id) || 0;
+		await categoryService.unarchive(id, cookies);
 	}
 };

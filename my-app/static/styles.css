@@ -1,0 +1,45 @@
+.mb {
+	margin-bottom: 1em;
+}
+
+.ml {
+	margin-left: 1em;
+}
+
+.row {
+	display: flex;
+	flex-direction: row;
+}
+
+.gap {
+	gap: 10px;
+}
+
+.ai-center {
+	align-items: center;
+}
+
+.jc-center {
+	justify-content: center;
+}
+
+.jc-space-between {
+	justify-content: space-between;
+}
+
+.t-center {
+	text-align: center;
+}
+
+.t-right {
+	text-align: right;
+}
+
+.btn-sm {
+	font-size: small;
+	padding: 0.5em;
+}
+
+.no-underline {
+	border-bottom: 0px;
+}

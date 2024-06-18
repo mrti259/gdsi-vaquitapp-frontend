@@ -33,6 +33,7 @@
 			try {
 				const response = await fetch(`/api/categories?groupId=${groupId}`);
 				categories = await response.json();
+				categories = categories.filter((category) => !category.is_archived);
 				return;
 			} catch {}
 		}
@@ -60,13 +61,6 @@
 		<title>{title} - Editar Presupuesto</title>
 	{/if}
 </svelte:head>
-
-<nav aria-label="breadcrumb">
-	<ul>
-		<li><a href="/groups">Grupos</a></li>
-		<li>Presupuestos</li>
-	</ul>
-</nav>
 
 <h2>
 	{#if edit}Editando{:else}Creando{/if} Presupuesto

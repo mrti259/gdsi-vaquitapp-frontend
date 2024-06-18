@@ -1,11 +1,5 @@
 import type { Cookies } from '@sveltejs/kit';
 
-type UserCredentials = {
-	id: number;
-	email: string;
-	jwt: string;
-};
-
 export function saveUserCredentials(cookies: Cookies, userCredentials: UserCredentials) {
 	cookies.set('jwt', userCredentials.jwt, { httpOnly: true, secure: true, path: '/' });
 	cookies.set('userId', userCredentials.id.toFixed(0), { path: '/' });
@@ -24,7 +18,7 @@ export function getAuthHeader(cookies: Cookies) {
 }
 
 export function getUserId(cookies: Cookies) {
-	return Number(cookies.get('userId'));
+	return Number(cookies.get('userId')) || undefined;
 }
 
 export function getUserEmail(cookies: Cookies) {

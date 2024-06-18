@@ -55,8 +55,15 @@ function put(path: string, data: object, headers?: Headers) {
 }
 
 export const userService = {
-	register: (data: { email: string; password: string }) => post('user/register', data),
-	login: (data: { email: string; password: string }) => post('user/login', data)
+	register: (data: UserRegistration) => post('user/register', data),
+	login: (data: UserRegistration) => post('user/login', data),
+	get: (cookies: Cookies) => get('user', getAuthHeader(cookies)),
+	update: (data: UserProfile, cookies: Cookies) =>
+		put('user/profile', data, getAuthHeader(cookies)),
+	googleSignIn: (data: UserGoogleCredentials) => post('user/google-signin', data),
+	googleLink: (data: UserGoogleCredentials, cookies: Cookies) =>
+		put('user/google-signin', data, getAuthHeader(cookies)),
+	googleUnlink: (cookies: Cookies) => del('user/google-signin', getAuthHeader(cookies))
 };
 export const groupService = {
 	save: (data: Group, cookies: Cookies) =>
@@ -75,7 +82,10 @@ export const groupService = {
 	listAllMemberBalances: (id: Id, cookies: Cookies) =>
 		get(`group/${id}/balance`, getAuthHeader(cookies)),
 	addMember: (id: Id, user_identifier: Id | string, cookies: Cookies) =>
-		post(`group/${id}/member`, { user_identifier }, getAuthHeader(cookies))
+		post(`group/${id}/member`, { user_identifier }, getAuthHeader(cookies)),
+	leaveGroup: (id: Id, cookies: Cookies) => del(`group/${id}/member`, getAuthHeader(cookies)),
+	kickFromGroup: (id: Id, userId: Id, cookies: Cookies) =>
+		del(`group/${id}/member?user_id=${userId}`, getAuthHeader(cookies))
 };
 export const spendingService = {
 	list: (groupId: Id, cookies: Cookies) => get(`group/${groupId}/spending`, getAuthHeader(cookies)),
@@ -106,7 +116,9 @@ export const paymentService = {
 		data.id > 0
 			? put(`payment/${data.id}`, data, getAuthHeader(cookies))
 			: post('payment', data, getAuthHeader(cookies)),
-	list: (groupId: Id, cookies: Cookies) => get(`group/${groupId}/payment`, getAuthHeader(cookies))
+	list: (groupId: Id, cookies: Cookies) => get(`group/${groupId}/payment`, getAuthHeader(cookies)),
+	confirm: (paymentId: Id, cookies: Cookies) =>
+		post(`payment/${paymentId}/confirm`, undefined!, getAuthHeader(cookies))
 };
 export const budgetService = {
 	save: (data: Budget, cookies: Cookies) =>
@@ -122,7 +134,9 @@ export const categoryService = {
 			? put(`category/${data.id}`, data, getAuthHeader(cookies))
 			: post('category', data, getAuthHeader(cookies)),
 	get: (id: Id, cookies: Cookies) => get(`category/${id}`, getAuthHeader(cookies)),
-	list: (groupId: Id, cookies: Cookies) => get(`group/${groupId}/category`, getAuthHeader(cookies))
+	list: (groupId: Id, cookies: Cookies) => get(`group/${groupId}/category`, getAuthHeader(cookies)),
+	archive: (id: Id, cookies: Cookies) => put(`category/${id}/is_archived`, { is_archived: true }, getAuthHeader(cookies)),
+	unarchive: (id: Id, cookies: Cookies) => put(`category/${id}/is_archived`, { is_archived: false }, getAuthHeader(cookies))
 };
 export const inviteService = {
 	get: (token: string, cookies: Cookies) => get(`invite/${token}`, getAuthHeader(cookies)),
@@ -131,5 +145,6 @@ export const inviteService = {
 		post(`invite/join/${data.token}`, undefined!, getAuthHeader(cookies))
 };
 export const paymentReminderService = {
-	send: (data: PaymentReminder, cookies: Cookies) => post(`payment_reminder`, data, getAuthHeader(cookies))
+	send: (data: PaymentReminder, cookies: Cookies) =>
+		post(`payment-reminder`, data, getAuthHeader(cookies))
 };
